@@ -16,6 +16,7 @@ if nargin < 2; ny = nx; end
 % Compute the number of nodes and allocate space for Nodes.
 
 Nv=(nx+1)*(ny+1);
+T.Shape = [L,R,L0,R0];
 T.N = Nv;
 T.Nx = nx;
 T.Ny = ny;
