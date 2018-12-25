@@ -39,8 +39,11 @@ function T = RecMesh(nx, ny, L, R, L0, R0)
     T.Edge = zeros(T.Ne, 2);
     T.Tri = zeros(T.Nt, 3);
     T.TrEg = zeros(T.Nt, 3);
+    T.EdgeFlag = zeros(T.Ne, 1);
     ind = 1;
     for j = 1:ny+1
+         if j==1;      T.EdgeFlag = 1;   end
+         if j==(ny+1); T.EdgeFlag = 3;   end
          for i = 1:nx
              T.Edge(ind, :) = [(j-1)*(nx+1)+i (j-1)*(nx+1)+i+1];
              ind = ind+1;
@@ -48,6 +51,8 @@ function T = RecMesh(nx, ny, L, R, L0, R0)
     end
     ind1 = ind-1;
     for i = 1:nx+1
+        if i == 1;      T.EdgeFlag = 4;   end
+        if i == (nx+1); T.EdgeFlag = 2;   end
         for j = 1:ny
             T.Edge(ind, :) = [(nx+1)*(j-1)+i (nx+1)*j+i];
             ind = ind+1;
