@@ -8,7 +8,7 @@ Fd.CNodePtrs = zeros(Nc ,1);
 Fd.NodePtrs = zeros(N, 1);
 Fd.NodeFlag = zeros(N, 1);
 indf = 0; indc = 0;
-for i = 1:(2*T.Nx+1)*(2*T.Ny+1)
+for i = 1:N
     flag = [0,0,0,0];
     if T.(U).Nodes(i, 2) == 0; Fd.NodeFlag(i) = 1; flag(1) = EdgeFlag(1);
     elseif T.(U).Nodes(i, 1) == 1; Fd.NodeFlag(i) = 2; flag(2) = EdgeFlag(2);
