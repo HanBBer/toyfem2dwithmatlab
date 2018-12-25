@@ -1,4 +1,4 @@
-Nx = 10; Ny = 10;
+Nx = 2; Ny = 2;
 
 T = RecMesh0(Nx, Ny);
 

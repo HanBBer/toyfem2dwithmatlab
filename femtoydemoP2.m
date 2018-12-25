@@ -13,6 +13,7 @@ Py = [zeros(12,1), zeros(12,1), ones(12,1), zeros(12,1), px, 2*py];
 
 nx = 2; ny = 2;
 T = RecMesh(nx, ny, 1, 1, 0, 0);
+T.P2.Property = 'P2';
 T.P2.Nodes = [T.Nodes; zeros(T.Ne, 2)];
 for i = 1:T.Ne
     cord = T.Nodes(T.Edge(i,:),:);
