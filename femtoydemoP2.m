@@ -29,7 +29,7 @@ T.P2.CNodePtrs = zeros(4*nx+4*ny ,1);
 T.P2.NodePtrs = zeros((2*nx+1)*(2*ny+1), 1);
 T.P2.NodeFlag = zeros((2*nx+1)*(2*ny+1), 1);
 indf = 0; indc = 0;
-for i = 1:(2*nx+1)*(2*ny+1)
+for i = 1:(2*T.Nx+1)*(2*T.Ny+1)
     flag = 0;
     if T.P2.Nodes(i, 2) == 0; T.P2.NodeFlag(i) = 1; flag = 1;
     elseif T.P2.Nodes(i, 1) == 1; T.P2.NodeFlag(i) = 2; flag = 1;

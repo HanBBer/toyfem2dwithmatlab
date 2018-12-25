@@ -17,6 +17,8 @@ function T = RecMesh(nx, ny, L, R, L0, R0)
     
     Nv=(nx+1)*(ny+1);
     T.N = Nv;
+    T.Nx = nx;
+    T.Ny = ny;
     T.Nodes=zeros(Nv,2);
     k=0;    dx=L/nx;    dy=R/ny;
     
