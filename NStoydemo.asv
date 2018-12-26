@@ -38,9 +38,8 @@ Kupx = FEMatrix(T, Fdu, "dx", Fdp, "mass");
 Kupy = FEMatrix(T, Fdu, "dy", Fdp, "mass");
 
 ind1 = 1; ind2 = ind1+Nfu; ind3 = ind2+Nfu; ind4 = ind3+Nfp;
-BigK = [M+nu*K, zeros(Nfu,Nfu), Kupx
-    zeros(Nfu,Nfu), M+nu*K, Kupy
-    Kupx', Kupy', 1e-10*eye(Nfp)];
+BigK = zeros(ind4-1, ind4-1);
+BigK(1:ind1-1,1:ind1-1) = M;
 
 
 for t = dt:dt:t1
