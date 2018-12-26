@@ -20,5 +20,5 @@ for i = 1:N
     end
 end
 Fd.NodePtrs(Fd.FNodePtrs) = 1:indf;
-Fd.NodePtrs(Fd.CNodePtrs) = 1:indc;
+Fd.NodePtrs(Fd.CNodePtrs) = -(1:indc);
 end
