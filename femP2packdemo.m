@@ -11,7 +11,7 @@ K = FEMatrix(T, Fd, 'nabla');
 g3 = @(x,y) 1+0.3*sin(pi*x);
 g24 = @(x,y) y;
 G = {[], g24, g3, g24};
-F = FemBiLoad(T, Fd, 'nabla', 0, G);
+F = FemBiLoad(T, Fd, 'nabla', G);
 
 U = K\F;
 Z = zeros(T.N, 1);
