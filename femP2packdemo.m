@@ -4,14 +4,14 @@ T = DefineFespace(T, 'U', "P2");
 Fd = FreedomDefine(T, 'U', [1,1,1,1]);
 
 
-K = FEMatrix(T, 'U', Fd, 'nabla');
+K = FEMatrix(T, Fd, 'nabla');
 [w, P, Px, Py, C1, C]=LoadQuad();
 
 % Compute the Load vector
 g3 = @(x,y) 1+0.3*sin(pi*x);
 g24 = @(x,y) y;
-g = {[],g24, g3, g24};
-F = FemLoad(T, 'U', Fd, 'nabla', g);
+G = {[], g24, g3, g24};
+F = FemBiLoad(T, Fd, 'nabla', 0, G);
 
 U = K\F;
 Z = zeros(T.N, 1);

@@ -1,4 +1,5 @@
-function K = FEMatrix(T, U1, Fd1, d1, U2, Fd2, d2)
+function K = FEMatrix(T, Fd1, d1, Fd2, d2)
+U1 = Fd1.Space;
 if nargin < 5; U2 = U1; Fd2 = Fd1; d2 = d1; end
 [w, P, Px, Py, C01, C02] = LoadQuad();
 if (T.(U1).Property == "P1");   C1 = C01;

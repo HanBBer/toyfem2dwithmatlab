@@ -1,4 +1,5 @@
 function Fd = FreedomDefine(T, U, EdgeFlag)
+Fd.Space = U;
 if T.(U).Property == "P1"; N = T.N; Nx = T.Nx; Ny = T.Ny; end
 if T.(U).Property == "P2"; N = (2*T.Nx+1)*(2*T.Ny+1); Nx = 2*T.Nx; Ny = 2*T.Ny; end
 Nc = [Nx-1, Ny-1, Nx-1, Ny-1]*EdgeFlag' + sum(EdgeFlag([1,2,3,4])|EdgeFlag([4,1,2,3]));
