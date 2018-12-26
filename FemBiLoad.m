@@ -1,13 +1,13 @@
-function F = FemLoad(T, U1, Fd1, d1, G, U2, Fd2, d2)
-
+function F = FemBiLoad(T, Fd1, d1, f, G1, Fd2, d2)
+U1 = Fd1.Space;
 if nargin < 6; U2 = U1; Fd2 = Fd1; d2=d1; end
 [w, P, Px, Py, C01, C02] = LoadQuad();
 if (T.(U1).Property == "P1");   C1 = C01;
 else;  C1 = C02; end
 if (T.(U1).Property == "P1");   C2 = C01;
 else;  C2 = C02; end
-Nf1 = size(Fd1.FNodePtrs, 1);
-F = zeros(Nf1, 1);
+Nf2 = size(Fd2.FNodePtrs, 1);
+F = zeros(Nf2, 1);
 ns = size(T.(U1).TC, 2); nr = size(T.(U2).TC, 2);
 for i = 1:T.Nt
     j = T.Tri(i, :);
@@ -44,7 +44,7 @@ for i = 1:T.Nt
                         I2 = P*c2;
                     end
                     I = sum(w*(I1.*I2)/2);
-                    g = G{Fd2.NodeFlag(j2(r))};
+                    g = G1{Fd2.NodeFlag(j2(r))};
                     if ~isempty(g)
                         F(jp1(s)) = F(jp1(s)) - I*Area*g(T.(U2).Nodes(j2(r),1), T.(U2).Nodes(j2(r),2));
                     end
