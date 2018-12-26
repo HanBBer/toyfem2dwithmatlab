@@ -16,7 +16,7 @@ for i = 1:T.Nt
     J = inv(A);
     Area = abs(det(A));
     j1 = T.(U1).TC(i, :); j2 = T.(U2).TC(i, :);
-    jp1 = Fd1.NodePtrs(j1); jp2 = Fd2.NodePtrs(j1);
+    jp1 = Fd1.NodePtrs(j1); jp2 = Fd2.NodePtrs(j2);
     for s = 1:ns
         if Fd1.NodeFlag(j1(s)) == 0
             c1 = C1(:, s);
