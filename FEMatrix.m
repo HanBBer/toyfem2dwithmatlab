@@ -1,6 +1,7 @@
 function K = FEMatrix(T, Fd1, d1, Fd2, d2)
 U1 = Fd1.Space;
 if nargin < 4; U2 = U1; Fd2 = Fd1; d2 = d1; end
+U2 = Fd2.Space;
 [w, P, Px, Py, C01, C02] = LoadQuad();
 if (T.(U1).Property == "P1");   C1 = C01;
 else;  C1 = C02; end
@@ -19,10 +20,10 @@ for i = 1:T.Nt
     j1 = T.(U1).TC(i, :); j2 = T.(U2).TC(i, :);
     jp1 = Fd1.NodePtrs(j1); jp2 = Fd2.NodePtrs(j2);
     for s = 1:ns
-        if Fd1.NodeFlag(j1(s)) == 0
+        if Fd1.NodePtrs(j1(s)) > 0
             c1 = C1(:, s);
             for r = 1:nr
-                if Fd2.NodeFlag(j2(r)) == 0
+                if Fd2.NodePtrs(j2(r)) > 0
                     c2 = C2(:, r);
                     if d1 == "mass"
                         I1 = P*c1;
