@@ -1,4 +1,4 @@
-function F = FemBiLoad(T, Fd1, d1, f, G1, Fd2, d2)
+function F = FemBiLoad(T, Fd1, d1, G1, Fd2, d2)
 U1 = Fd1.Space;
 if nargin < 6; U2 = U1; Fd2 = Fd1; d2=d1; end
 [w, P, Px, Py, C01, C02] = LoadQuad();
