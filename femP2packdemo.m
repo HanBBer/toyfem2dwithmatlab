@@ -1,6 +1,9 @@
 nx = 2; ny = 2;
 T = RecMesh(nx, ny, 1, 1, 0, 0);
 T = DefineFespace(T, 'U', "P2");
+% T.U.Tri = T.U.TP;
+% T.U.N = size(T.U.Nodes, 1); T.U.Nt = size(T.U.TP, 1); T.U.Ne = T.Ne*4;
+% ShowMesh(T.U, [1, 1, 0]);
 Fd = FreedomDefine(T, 'U', [1,1,1,1]);
 
 
