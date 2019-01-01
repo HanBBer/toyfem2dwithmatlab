@@ -1,7 +1,8 @@
 function K = FEMatrix(T, Fd1, d1, Fd2, d2)
 U1 = Fd1.Space;
-if nargin < 4; U2 = U1; Fd2 = Fd1; d2 = d1; end
-U2 = Fd2.Space;
+if nargin < 4; U2 = U1; Fd2 = Fd1; d2 = d1; 
+else; U2 = Fd2.Space;
+end
 [w, P, Px, Py, C01, C02] = LoadQuad();
 if (T.(U1).Property == "P1");   C1 = C01;
 else;  C1 = C02; end
@@ -20,7 +21,8 @@ for i = 1:T.Nt
     j1 = T.(U1).TC(i, :); j2 = T.(U2).TC(i, :);
     jp1 = Fd1.NodePtrs(j1); jp2 = Fd2.NodePtrs(j2);
     for s = 1:ns
-        if Fd1.NodePtrs(j1(s)) > 0
+        %if Fd1.NodePtrs(j1(s)) > 0
+        if jp1(s) > 0
             c1 = C1(:, s);
             for r = 1:nr
                 if Fd2.NodePtrs(j2(r)) > 0
@@ -32,7 +34,7 @@ for i = 1:T.Nt
                         switch d1
                             case {"dx"}; I1 = V1*J(:,1);
                             case {"dy"}; I1 = V1*J(:,2);
-                            case {"nabla"}; I1 = V1(:, 1:2)/A;
+                            case {"nabla"}; I1 = V1/A;
                         end
                     end
                     if d2 == "mass"
@@ -42,7 +44,7 @@ for i = 1:T.Nt
                         switch d2
                             case {"dx"}; I2 = V2*J(:,1);
                             case {"dy"}; I2 = V2*J(:,2);
-                            case {"nabla"}; I2 = V2(:, 1:2)/A;
+                            case {"nabla"}; I2 = V2/A;
                         end
                     end
 

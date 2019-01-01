@@ -21,4 +21,3 @@ Z(Fd.NodeFlag==3) = g3(T.U.Nodes(Fd.NodeFlag==3 ,1));
 Z(Fd.NodeFlag==4) = T.U.Nodes(Fd.NodeFlag==4, 2);
 
 figure(2); trisurf(T.U.TP, T.U.Nodes(:,1), T.U.Nodes(:,2), Z);
-
