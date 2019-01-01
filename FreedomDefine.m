@@ -11,11 +11,10 @@ Fd.NodeFlag = zeros(N, 1);
 indf = 0; indc = 0;
 for i = 1:N
     flag = [0,0,0,0];
-    if T.(U).Nodes(i, 2) == 0; Fd.NodeFlag(i) = 1; flag(1) = EdgeFlag(1);
-    elseif T.(U).Nodes(i, 1) == 1; Fd.NodeFlag(i) = 2; flag(2) = EdgeFlag(2);
-    elseif T.(U).Nodes(i, 2) == 1; Fd.NodeFlag(i) = 3; flag(3) = EdgeFlag(3);
-    elseif T.(U).Nodes(i, 1) == 0; Fd.NodeFlag(i) = 4; flag(4) = EdgeFlag(4);
-    end
+    if T.(U).Nodes(i, 2) == 0; Fd.NodeFlag(i) = 1; flag(1) = EdgeFlag(1);end
+    if T.(U).Nodes(i, 1) == 1; Fd.NodeFlag(i) = 2; flag(2) = EdgeFlag(2);end
+    if T.(U).Nodes(i, 2) == 1; Fd.NodeFlag(i) = 3; flag(3) = EdgeFlag(3);end
+    if T.(U).Nodes(i, 1) == 0; Fd.NodeFlag(i) = 4; flag(4) = EdgeFlag(4);end
     if sum(flag); indc = indc+1; Fd.CNodePtrs(indc) = i;
     else; indf = indf+1; Fd.FNodePtrs(indf) = i;
     end
