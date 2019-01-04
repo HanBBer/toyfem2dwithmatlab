@@ -8,7 +8,7 @@ Fd = FreedomDefine(T, 'U', [1,1,1,1]);
 
 
 K = FEMatrix(T, Fd, 'nabla');
-[w, P, Px, Py, C1, C]=LoadQuad();
+%[w, P, Px, Py, C1, C]=LoadQuad();
 
 % Compute the Load vector
 g3 = @(x,y) 1+0.3*sin(pi*x);
