@@ -23,7 +23,7 @@ f2 = @(x,y) -cos(x).*sin(y+t)+(2*nu+1)*cos(x).*cos(y+t);
 u1 = @(x,y) sin(x).*sin(y+t);
 u2 = @(x,y) cos(x).*cos(y+t);
 
-T = RecMesh(2*n, 2*n, 1, 1, 0, 0);
+T = RecMesh(n, n, 1, 1, 0, 0);
 
 T = DefineFespace(T, 'U', "P2");
 T = DefineFespace(T, 'P', "P1");
@@ -57,17 +57,18 @@ for t = dt:dt:t1
     f2 = @(x,y) -cos(x).*sin(y+t)+(2*nu+1)*cos(x).*cos(y+t);
     
     %Truth
-    u1 = @(x,y) sin(x).*sin(y+t);
+    u1 = @(x,y) sin(x).*sin(y+t); 
     u2 = @(x,y) cos(x).*cos(y+t);
-    pe = @(x,y) cos(x).*sin(y+t);
+    %pe = @(x,y) cos(x).*sin(y+t);
     
     G1 = {u1, u1, u1, []};
     G2 = {u2, u2, u2, []};
 
     BigF = zeros(2*Nfu+Nfp,1);
-    BigF(ind1:ind2-1) = Mu/dt*u10 + FemBiLoad(T, Fdu, 'nabla', G1)  + FemLinearLoad(T, Fdu, f1, []);
-    BigF(ind2:ind3-1) = Mu/dt*u20 + FemBiLoad(T, Fdu, 'nabla', G2)  + FemLinearLoad(T, Fdu, f2, []);
-    
+    BigF(ind1:ind2-1) = Mu/dt*u10 + nu*FemBiLoad(T, Fdu, 'nabla', G1)  + FemLinearLoad(T, Fdu, f1, []);
+    BigF(ind2:ind3-1) = Mu/dt*u20 + nu*FemBiLoad(T, Fdu, 'nabla', G2)  + FemLinearLoad(T, Fdu, f2, []);
+    BigF(ind3:end) = -FemBiLoad(T, Fdp, 'mass', G1, Fdu, 'dx') - FemBiLoad(T, Fdp, 'mass', G2, Fdu, 'dy');
+ 
     U = BigK\BigF;
     %U = bicg(BigK,BigF);
     u10 = U(ind1:ind2-1);
@@ -87,3 +88,25 @@ for t = dt:dt:t1
     pause(0.01)
     
 end
+
+% Validation Part
+t = 0;
+u1 = @(x,y) sin(x).*sin(y+t);
+u2 = @(x,y) cos(x).*cos(y+t);
+pe = @(x,y) cos(x).*sin(y+t);
+u11 = u1(ucord(:,1), ucord(:,2));
+u21 = u2(ucord(:,1), ucord(:,2));
+U1 = [ u11; u21; pe(pcord(:,1), pcord(:,2))];
+BigF = zeros(2*Nfu+Nfp,1);
+BigF(ind1:ind2-1) = Mu/dt*u11 + nu*FemBiLoad(T, Fdu, 'nabla', G1)  + FemLinearLoad(T, Fdu, f1, []);
+BigF(ind2:ind3-1) = Mu/dt*u21 + nu*FemBiLoad(T, Fdu, 'nabla', G2)  + FemLinearLoad(T, Fdu, f2, []);
+BigF(ind3:end) = -FemBiLoad(T, Fdp, 'mass', G1, Fdu, 'dx') - FemBiLoad(T, Fdp, 'mass', G2, Fdu, 'dy');
+
+t = dt;
+u1 = @(x,y) sin(x).*sin(y+t);
+u2 = @(x,y) cos(x).*cos(y+t);
+pe = @(x,y) cos(x).*sin(y+t);
+u12 = u1(ucord(:,1), ucord(:,2));
+u22 = u2(ucord(:,1), ucord(:,2));
+U2 = [ u12; u22; pe(pcord(:,1), pcord(:,2))];
+fprintf("The Model Error is: %f\n", BigK*U2-BigF);
