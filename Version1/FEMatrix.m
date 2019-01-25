@@ -25,7 +25,7 @@ for i = 1:T.Nt
         if jp1(s) > 0
             c1 = C1(:, s);
             for r = 1:nr
-                if Fd2.NodePtrs(j2(r)) > 0
+                if jp2(r) > 0
                     c2 = C2(:, r);
                     if d1 == "mass"
                         I1 = P*c1;

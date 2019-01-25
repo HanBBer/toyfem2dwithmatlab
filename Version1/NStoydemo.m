@@ -40,7 +40,7 @@ Kuyp = FEMatrix(T, Fdu, "dy", Fdp, "mass");
 
 ind1 = 1; ind2 = ind1+Nfu; ind3 = ind2+Nfu; ind4 = ind3+Nfp;
 BigK = [Mu/dt+nu*Ku, zeros(Nfu,Nfu), -Kuxp
-    zeros(Nfu,Nfu), Mu/dt+nu.*Ku, -Kuyp
+    zeros(Nfu,Nfu), Mu/dt+nu*Ku, -Kuyp
     -Kuxp', -Kuyp', -1e-10*Mp];
 
 

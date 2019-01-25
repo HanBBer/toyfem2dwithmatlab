@@ -1,4 +1,4 @@
-function F = FemBiLoad(T, Fd1, d1, G1, Fd2, d2)
+function F = FemBiLoad(T, Fd1, d1, G2, Fd2, d2)
 % Fd1 is free; Fd2 is constained
 U1 = Fd1.Space;
 if nargin < 6; U2 = U1; Fd2 = Fd1; d2=d1; 
@@ -21,10 +21,11 @@ for i = 1:T.Nt
     j1 = T.(U1).TC(i, :); j2 = T.(U2).TC(i, :);
     jp1 = Fd1.NodePtrs(j1);
     for s = 1:ns
-        if Fd1.NodeFlag(j1(s)) == 0
+        %if Fd1.NodeFlag(j1(s)) == 0
+        if jp1(s) > 0    
             c1 = C1(:, s);
             for r = 1:nr
-                if Fd2.NodeFlag(j2(r)) ~= 0
+                if Fd2.NodePtrs(j2(r)) < 0
                     c2 = C2(:, r);
                     if d1 == "mass"
                         I1 = P*c1;
@@ -47,7 +48,7 @@ for i = 1:T.Nt
                         end
                     end
                     I = sum(w*(I1.*I2)/2);
-                    g = G1{Fd2.NodeFlag(j2(r))};
+                    g = G2{Fd2.NodeFlag(j2(r))};
                     if ~isempty(g)
                         F(jp1(s)) = F(jp1(s)) - I*Area*g(T.(U2).Nodes(j2(r),1), T.(U2).Nodes(j2(r),2));
                     end
