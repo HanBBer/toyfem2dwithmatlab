@@ -24,8 +24,8 @@ Kuyp = FEMatrix(T, Fdu, "dy", Fdp, "mass");
 Mp = FEMatrix(T, Fdp, "mass");
 
 % System Clarification
-BigK = [Ku, zeros(Nfu,Nfu), Kuxp
-    zeros(Nfu,Nfu), Ku, Kuyp
+BigK = [-Ku, zeros(Nfu,Nfu), Kuxp
+    zeros(Nfu,Nfu), -Ku, Kuyp
     Kuxp', Kuyp', -1e-10*Mp]; 
 
 BigF = zeros(2*Nfu+Nfp,1);
@@ -40,8 +40,9 @@ U = BigK\BigF;
 Z = zeros(Nfp, 1);
 Z(Fdp.FNodePtrs) = U(ind3:ind4-1);
 %Z(Fdu.NodePtrs<0) = U2(T.U.Nodes(Fdu.NodePtrs<0, 1),
-%T.U.Nodes(Fdu.NodePtrs<0, 2));+
+%T.U.Nodes(Fdu.NodePtrs<0, 2));
 trisurf(T.P.TP, T.P.Nodes(:,1), T.P.Nodes(:,2), Z-mean(Z));
+%{
 up1 = U(ind1:ind2-1); up2 = U(ind2:ind3-1);
 figure(2)
 hold on
@@ -51,3 +52,4 @@ for i = 1:size(T.P.Nodes,1)
     plot([cord(1),cord(1)+up1(i)],[cord(2),cord(2)+up2(i)],'b');
 end
 axis([0,1,0,1])
+%}

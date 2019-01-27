@@ -1,25 +1,26 @@
 % This is a Stokes Problem calculation demo
 
 % Boundary condition
-%{
+
 u1 = @(x,y) sin(x).*sin(y);
 u2 = @(x,y) cos(x).*cos(y);
 f1 = @(x,y) -2*sin(x).*sin(y);
 f2 = @(x,y) 0;
-%}
 
+%{
 u1 = @(x,y) 1-y.^2;
 u2 = @(x,y) 0;
 f1 = @(x,y) 0;
 f2 = @(x,y) 0;
-
+%}
 
 G1 = {u1, u1, u1, u1};
 G2 = {u2, u2, u2, u2};
 
 
 % Space Define
-nx = 2; ny = 2;
+N = 4;
+nx = N; ny = N;
 T = RecMesh(nx, ny, 1, 1, 0, 0);
 T = DefineFespace(T, 'U', "P2");
 Fdu = FreedomDefine(T, 'U', [1,1,1,1]);

@@ -3,7 +3,8 @@ dbstop if error;
 
 % Problem Preparation(truth and boundary condition)
 u = @(x, y) x.^2.*y.*(1-x).*(1-y);
-f = @(x, y) u(x,y)-2*y.*(1-x).*(1-y)+4.*x.*y.*(1-y)+2*x.^2.*(1-x);
+f = @(x, y) u(x,y)+2*y.*(1-x).*(1-y)-4.*x.*y.*(1-y)-2*x.^2.*(1-x);
+
 
 % Space Define
 nx = 10; ny = 10;
@@ -12,7 +13,7 @@ T = DefineFespace(T, 'U', "P2");
 Fd = FreedomDefine(T, 'U', [1,1,1,1]);
 
 % System Clarification
-K = FEMatrix(T, Fd, 'nabla') +FEMatrix(T, Fd, 'mass');
+K = -FEMatrix(T, Fd, 'nabla') + FEMatrix(T, Fd, 'mass');
 G = {u, u, u, u};
 F = FemBiLoad(T, Fd, 'nabla', G) + FemLinearLoad(T, Fd, f, []);
 
