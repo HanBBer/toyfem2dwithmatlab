@@ -10,29 +10,30 @@ function K = symBilinear(U, type, fnk)
 if nargin < 3; fnk = []; end
 degree = U.Degree;
 Quads2d = LoadQuad2d(2*degree);
-if degree == 1
-    P = [ones(size(Quads2d.px)), Quads2d.px, Quads2d.py];
-    Px = [zeros(size(Quads2d.px)), ones(size(Quads2d.px)), zeros(size(Quads2d.px))];
-    Py = [zeros(size(Quads2d.px)), zeros(size(Quads2d.px)), ones(size(Quads2d.px))];
-    rcord = [0, 0; 1, 0; 0, 1];
-    C = [ones(size(rcord,1),1), rcord];
-end
-if degree == 2
-    P = [ones(size(Quads2d.px)), Quads2d.px, Quads2d.py,...
-        Quads2d.px.^2, Quads2d.px.*Quads2d.py, Quads2d.py.^2];
-    Px = [zeros(size(Quads2d.px)), ones(size(Quads2d.px)), zeros(size(Quads2d.px)),...
-        2*Quads2d.px, Quads2d.py, zeros(size(Quads2d.px))];
-    Py = [zeros(size(Quads2d.px)), zeros(size(Quads2d.px)), ones(size(Quads2d.px)),...
-        zeros(size(Quads2d.px)), Quads2d.px, 2*Quads2d.py];
-    rcord = [0, 0; 1, 0; 0, 1; 1/2, 0; 1/2, 1/2; 0, 1/2];
-    C = [ones(size(rcord,1),1), rcord, rcord(:,1).^2, rcord(:,1).*rcord(:,2), rcord(:,2).^2];
-end
+Tr = RefInfo(U.Degree, Quads2d);
+% if degree == 1
+%     P = [ones(size(Quads2d.px)), Quads2d.px, Quads2d.py];
+%     Px = [zeros(size(Quads2d.px)), ones(size(Quads2d.px)), zeros(size(Quads2d.px))];
+%     Py = [zeros(size(Quads2d.px)), zeros(size(Quads2d.px)), ones(size(Quads2d.px))];
+%     rcord = [0, 0; 1, 0; 0, 1];
+%     C = [ones(size(rcord,1),1), rcord];
+% end
+% if degree == 2
+%     P = [ones(size(Quads2d.px)), Quads2d.px, Quads2d.py,...
+%         Quads2d.px.^2, Quads2d.px.*Quads2d.py, Quads2d.py.^2];
+%     Px = [zeros(size(Quads2d.px)), ones(size(Quads2d.px)), zeros(size(Quads2d.px)),...
+%         2*Quads2d.px, Quads2d.py, zeros(size(Quads2d.px))];
+%     Py = [zeros(size(Quads2d.px)), zeros(size(Quads2d.px)), ones(size(Quads2d.px)),...
+%         zeros(size(Quads2d.px)), Quads2d.px, 2*Quads2d.py];
+%     rcord = [0, 0; 1, 0; 0, 1; 1/2, 0; 1/2, 1/2; 0, 1/2];
+%     C = [ones(size(rcord,1),1), rcord, rcord(:,1).^2, rcord(:,1).*rcord(:,2), rcord(:,2).^2];
+% end
 % M = inv(C); M is the coefficients matrix of basis funtions
 if type == "mass"
-    Ical = P/C;
+    Ical = Tr.P/Tr.C;
 else
-    Ixcal = Px/C;
-    Iycal = Py/C;
+    Ixcal = Tr.Px/Tr.C;
+    Iycal = Tr.Py/Tr.C;
 end
 indk = 1;
 n = size(U.TC(1, :), 2);
@@ -41,9 +42,6 @@ indi = ones(tmp ,1);
 indj = ones(tmp, 1);
 valuek = zeros(tmp, 1);
 for i = 1:U.Nt
-    if i == 9
-        i = 9;
-    end
     ind = U.TC(i, :);
     cord = U.Node(ind, :);
     A = (cord(2:3, :) - repmat(cord(1, :), 2,1))';
