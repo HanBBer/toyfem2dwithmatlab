@@ -45,7 +45,7 @@ end
 
 K = symBilinear(U2, 'nabla', []);
 %K = symBilinear(U2, 'dx', []) + symBilinear(U2, 'dy', []);
-%K = nonsymBilinear(U2, 'nabla', U2, 'nabla', []);
+%K = nonsymBilinear(T, U2, 'nabla', U2, 'nabla', []);
 g0 = @(x,y) 0;
 G = {g0, g0, g0, g0};
 [X, FNodeptr] = Freedomdefine(U2, [1,1,1,1], G);
