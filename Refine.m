@@ -4,9 +4,10 @@ T.Shape = T0.Shape;
 T.N = T0.N + T0.Ne;
 T.Nt = 4*T0.Nt;
 T.Ne = 2*T0.Ne+3*T0.Nt;
+
 % Every edge yeilds a new point
 T.Node = [T0.Node; zeros(T0.Ne, 2)];
-for i = 1:T0.Ne; T.Node(i+T0.N,:) = mean(T0.Node(T0.Edge(i,:),:));end
+for i = 1:T0.Ne; T.Node(i+T0.N,:) = mean(T0.Node(T0.Edge(i,:),:)); end
 % Refinement of 1 element performs as below:
 %      tri0i      n1
 %                 /\
@@ -28,7 +29,7 @@ for i = 1:T0.Ne; T.Node(i+T0.N,:) = mean(T0.Node(T0.Edge(i,:),:));end
 % the second element is a new node
 % that means, for the Type I edge which need to be checked
 % we can compare the first elment of edge with the old node of old tri
-T.Edge = [T0.Edge(:, 1), T0.N+(1:T0.Ne)';
+T.Edge = [T0.Edge(:, 1), T0.N + (1:T0.Ne)';
     T0.Edge(:, 2), T0.N + (1:T0.Ne)';
     T0.N + T0.TrEg(:, [1,2]);
     T0.N + T0.TrEg(:, [2,3]);
