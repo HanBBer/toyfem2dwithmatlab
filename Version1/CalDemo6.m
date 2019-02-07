@@ -1,19 +1,19 @@
 % This is a Stokes Problem calculation demo
 
 % Boundary condition
-
+%{
 u1 = @(x,y) sin(x).*sin(y);
 u2 = @(x,y) cos(x).*cos(y);
 % p = @(x,y) cos(x).*sin(y);
 f1 = @(x,y) 0;
 f2 = @(x,y) 2*cos(x).*cos(y);
+%}
 
-%{
 u1 = @(x,y) 1-y.^2;
 u2 = @(x,y) 0;
 f1 = @(x,y) 0;
 f2 = @(x,y) 0;
-%}
+
 
 G1 = {u1, u1, u1, u1};
 G2 = {u2, u2, u2, u2};
