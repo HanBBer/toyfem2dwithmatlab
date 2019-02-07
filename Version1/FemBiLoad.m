@@ -32,8 +32,8 @@ for i = 1:T.Nt
                     else
                         V1 = [Px*c1 Py*c1];
                         switch d1
-                            case {"dx"}; I1 = V1*J(:,1);
-                            case {"dy"}; I1 = V1*J(:,2);
+                            case {"dx"}; I1 = V1*J(:, 1);
+                            case {"dy"}; I1 = V1*J(:, 2);
                             case {"nabla"}; I1 = V1(:, 1:2)/A;
                         end
                     end

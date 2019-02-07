@@ -1,4 +1,4 @@
-dbstop if error;
+% dbstop if error;
 % This is a Dirichlet Problem calculation demo
 
 % Problem Preparation(truth and boundary condition)
@@ -6,7 +6,8 @@ u = @(x, y) exp(sin(x)+cos(y));
 f = @(x, y) -(cos(x).^2-sin(x)+sin(y).^2-cos(y)).*exp(sin(x)+cos(y));
 
 % Space Define
-nx = 8; ny = 8;
+N = 4;
+nx = N; ny = N;
 T = RecMesh(nx, ny, 1, 1, 0, 0);
 T = DefineFespace(T, 'U', "P2");
 Fd = FreedomDefine(T, 'U', [1,1,1,1]);

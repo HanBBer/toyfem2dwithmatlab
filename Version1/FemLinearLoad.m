@@ -20,9 +20,10 @@ for i = 1:T.Nt
         Area = abs(det(A));
         jp = Fd.NodePtrs( T.(U).TC(i, :) );
     end
-    fval = f(Pcal(:, 1), Pcal(:, 2));
-    I = Area*V'*(w'.*fval)/2;
+
     if ~isempty(f)
+        fval = f(Pcal(:, 1), Pcal(:, 2));
+        I = Area*V'*(w'.*fval)/2;
         for s = 1:ns
             if jp(s) > 0
                 F(jp(s)) = F(jp(s)) + I(s);

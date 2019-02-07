@@ -4,8 +4,9 @@
 
 u1 = @(x,y) sin(x).*sin(y);
 u2 = @(x,y) cos(x).*cos(y);
-f1 = @(x,y) -2*sin(x).*sin(y);
-f2 = @(x,y) 0;
+% p = @(x,y) cos(x).*sin(y);
+f1 = @(x,y) 0;
+f2 = @(x,y) 2*cos(x).*cos(y);
 
 %{
 u1 = @(x,y) 1-y.^2;
@@ -37,14 +38,14 @@ Kuyp = FEMatrix(T, Fdu, "dy", Fdp, "mass");
 Mp = FEMatrix(T, Fdp, "mass");
 
 % System Clarification
-BigK = [Ku, zeros(Nfu,Nfu), Kuxp
-    zeros(Nfu,Nfu), Ku, Kuyp
-    Kuxp', Kuyp', -1e-10*Mp]; 
+BigK = [Ku, zeros(Nfu,Nfu), -Kuxp
+    zeros(Nfu,Nfu), Ku, -Kuyp
+    -Kuxp', -Kuyp', -1e-10*Mp]; 
 
 BigF = zeros(2*Nfu+Nfp,1);
 BigF(ind1:ind2-1) = FemBiLoad(T, Fdu, 'nabla', G1) + FemLinearLoad(T, Fdu, f1, []);
 BigF(ind2:ind3-1) = FemBiLoad(T, Fdu, 'nabla', G2) + FemLinearLoad(T, Fdu, f2, []);
-BigF(ind3:end) = FemBiLoad(T, Fdp, 'mass', G1, Fdu, 'dx') + FemBiLoad(T, Fdp, 'mass', G2, Fdu, 'dy');
+BigF(ind3:end) = - FemBiLoad(T, Fdp, 'mass', G1, Fdu, 'dx') - FemBiLoad(T, Fdp, 'mass', G2, Fdu, 'dy');
 
 % Solve and visualization
 %spparms('umfpack',1);
@@ -62,7 +63,8 @@ subplot(1,2,1);
 Z = zeros(Nfu, 1);
 Z(Fdu.FNodePtrs) = U(ind1:ind2-1);
 Z(Fdu.NodePtrs<0) = u1(T.U.Nodes(Fdu.NodePtrs<0, 1),T.U.Nodes(Fdu.NodePtrs<0, 2));
-trisurf(T.U.TP, T.U.Nodes(:,1), T.U.Nodes(:,2), Z-u1(T.U.Nodes(:, 1),T.U.Nodes(:, 2)));
+%trisurf(T.U.TP, T.U.Nodes(:,1), T.U.Nodes(:,2), Z-u1(T.U.Nodes(:, 1),T.U.Nodes(:, 2)));
+trisurf(T.U.TP, T.U.Nodes(:,1), T.U.Nodes(:,2), u1(T.U.Nodes(:, 1),T.U.Nodes(:, 2)));
 subplot(1,2,2);
 Z = zeros(Nfu, 1);
 Z(Fdu.FNodePtrs) = U(ind2:ind3-1);

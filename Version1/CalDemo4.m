@@ -8,7 +8,7 @@ G2 = {U2, U2, U2, U2};
 
 % Space Define
 nx = 10; ny = 10;
-T = RecMesh(nx, ny, 1, 1, 0, 0);
+T = RecMesh(nx, ny, 2, 2, -1, -1);
 T = DefineFespace(T, 'U', "P2");
 Fdu = FreedomDefine(T, 'U', [1,1,1,1]);
 Nfu = size(Fdu.FNodePtrs,1);

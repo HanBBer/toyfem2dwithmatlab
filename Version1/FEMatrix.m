@@ -8,7 +8,7 @@ if (T.(U1).Property == "P1");   C1 = C01;
 else;  C1 = C02; end
 if (T.(U1).Property == "P1");   C2 = C01;
 else;  C2 = C02; end
-Nf1 = size(Fd1.FNodePtrs, 1);  
+Nf1 = size(Fd1.FNodePtrs, 1);
 Nf2 = size(Fd2.FNodePtrs, 1);
 K = zeros(Nf1, Nf2);
 ns = size(T.(U1).TC, 2); nr = size(T.(U2).TC, 2);
@@ -21,7 +21,6 @@ for i = 1:T.Nt
     j1 = T.(U1).TC(i, :); j2 = T.(U2).TC(i, :);
     jp1 = Fd1.NodePtrs(j1); jp2 = Fd2.NodePtrs(j2);
     for s = 1:ns
-        %if Fd1.NodePtrs(j1(s)) > 0
         if jp1(s) > 0
             c1 = C1(:, s);
             for r = 1:nr
@@ -49,7 +48,7 @@ for i = 1:T.Nt
                     end
 
                     I = sum(w*(I1.*I2)/2);
-                    K(jp1(s), jp2(r)) = K(jp1(s), jp2(r)) + I*Area;
+                    K(jp1(s), jp2(r)) = K(jp1(s), jp2(r)) + I*Area; 
                 end
             end
         end
