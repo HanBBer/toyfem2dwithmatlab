@@ -64,17 +64,20 @@ for t = dt:dt:t1
     
     Xold = X;
     
-    %{
-    subplot(1,2,1)
-    trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), X(1:Nu));
-    subplot(1,2,2)
-    trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), U1(U.Node(:, 1), U.Node(:, 2)));
-    %}
-    trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), X(2*Nu+1:end),...
-        'FaceColor', 'interp', 'EdgeColor', 'interp');
-    view(2);
-    box off; set(gca, 'XTick', [], 'YTick', []);
-    colorbar;
-    title(['t = ', num2str(t), 's']);
-    pause(0.001)
+
+    if ~mod(t, 0.1)        
+        subplot(1,2,1)
+        trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), X(1:Nu));
+        subplot(1,2,2)
+        trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), U1(U.Node(:, 1), U.Node(:, 2)));
+        %{
+        trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), X(2*Nu+1:end),...
+            'FaceColor', 'interp', 'EdgeColor', 'interp');
+        view(2);
+        box off; set(gca, 'XTick', [], 'YTick', []);
+        colorbar;
+        %}
+        title({['t = ', num2str(t), 's']});
+        pause(0.01)
+    end
 end

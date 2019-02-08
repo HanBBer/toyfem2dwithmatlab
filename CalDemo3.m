@@ -41,7 +41,7 @@ Nu = U.N;
 Np = P.N;
 K = [Ku, sparse(Nu, Nu), -Kuxp;
     sparse(Nu, Nu), Ku, -Kuyp;
-    -Kuxp', -Kuyp', 1e-10*Kp];
+    -Kuxp', -Kuyp', 1e-10*Mp];
 X = [Xu1; Xu2; Xp];
 Freedom = [FNu1; FNu2; FNp];
 F = [F1; F2; sparse(Np,1)];
