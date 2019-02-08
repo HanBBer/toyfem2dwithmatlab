@@ -58,25 +58,25 @@ for i = 1:U.Nt
                 g = h{egflag};
                 if degree == 1
                     switch j
-                        case{1}; ind = ind([1,2]);
-                        case{2}; ind = ind([2,3]);
-                        case{3}; ind = ind([3,1]);
+                        case{1}; eind = ind([1,2]);
+                        case{2}; eind = ind([2,3]);
+                        case{3}; eind = ind([3,1]);
                     end
                 end
                 if degree == 2
                     switch j
-                        case{1}; ind = ind([1,4,2]);
-                        case{2}; ind = ind([2,5,3]);
-                        case{3}; ind = ind([3,6,1]);
+                        case{1}; eind = ind([1,4,2]);
+                        case{2}; eind = ind([2,5,3]);
+                        case{3}; eind = ind([3,6,1]);
                     end
                 end
-                egnode1 = U.Node(ind(1),:);
-                egnode2 = U.Node(ind(end),:);
+                egnode1 = U.Node(eind(1),:);
+                egnode2 = U.Node(eind(end),:);
                 len = norm(egnode1-egnode2,2);
                 cordh = 1/2*repmat(egnode1+egnode2, nquads1d,1)+1/2*(egnode2-egnode1).*Quads1d.px;
                 I = len/2*Ical1d'*(Quads1d.w'.*g(cordh(:, 1), cordh(:, 2)));
-                for k = 1:length(ind)
-                    indi(indk) = ind(k);
+                for k = 1:length(eind)
+                    indi(indk) = eind(k);
                     valueF(indk) = I(k);
                     indk = indk + 1;
                 end
