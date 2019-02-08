@@ -67,6 +67,6 @@ for i = 1:U.Nt
         end
     end
 end
-K = sparse(indi, indj, valuek);
-K = K + K' - diag(diag(K));
+diagind = (indi == indj);
+K = sparse([indi(diagind);indi(~diagind);indj(~diagind)], [indj(diagind);indj(~diagind);indi(~diagind)], [valuek(diagind);valuek(~diagind);valuek(~diagind)]);
 end
