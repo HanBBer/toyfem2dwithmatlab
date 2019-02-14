@@ -18,7 +18,7 @@ if sum(hflag)
     nquads1d = size(Quads1d.px, 1);
     if degree == 1; Ical1d = [ones(nquads1d,1), Quads1d.px]/[1, -1; 1, 1]; end
     if degree == 2; Ical1d = [ones(nquads1d,1), Quads1d.px, (Quads1d.px).^2]/[1, -1, 1; 1, 0, 0; 1, 1, 1]; end
-    % We need to estimate pre-allocated space for F
+    % We need to estimate pre-allocated space for F   
     if degree == 1; N = U.N+U.Ne-2*U.Nt; end
     if degree == 2; N = (U.N-U.Nt)/2*3; end
 end
