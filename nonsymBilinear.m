@@ -7,6 +7,8 @@ function K = nonsymBilinear(T, U1, type1, U2, type2, fnk)
 % 2. We do calculation on refference trigular
 % 3. Since the matrix is symmetry, we do not calculate all the element,
 %    but make a duplication to raise effciency
+% Example: if K = nonsymBilinear(T, U, 'dx', P, 'mass', []);
+%           then V' K P = (dx(v), p); Q' K' U = (q, dx(u))
 if nargin < 5; fnk = []; end
 degree = max(U1.Degree, U2.Degree);
 Quads2d = LoadQuad2d(2*degree);
