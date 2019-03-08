@@ -1,4 +1,4 @@
-function K = symBilinear(U, type, fnk)
+function K = symBilinear(U, type, fnf)
 % This function calculates the inner product of finite element function
 % We implements this process element by element
 % Here we do not treat any kind of boundary condition
@@ -7,7 +7,7 @@ function K = symBilinear(U, type, fnk)
 % 2. We do calculation on refference trigular
 % 3. Since the matrix is symmetry, we do not calculate all the element,
 %    but make a duplication to raise effciency
-if nargin < 3; fnk = []; end
+if nargin < 3; fnf = []; end
 degree = U.Degree;
 Quads2d = LoadQuad2d(2*degree);
 Tr = RefInfo(U.Degree, Quads2d);
@@ -57,9 +57,9 @@ for i = 1:U.Nt
                 case {"dy"}; I = ([Ixcal(:, s), Iycal(:, s)]*J(:, 2)).*([Ixcal(:, r), Iycal(:, r)]*J(:, 2));
                 case {"nabla"}; I = ([Ixcal(:, s), Iycal(:, s)]/A).*([Ixcal(:, r), Iycal(:, r)]/A);
             end
-            if ~isempty(fnk)
+            if ~isempty(fnf)
                 cordf = repmat(cord(1, :), n,1) + [Quads2d.px, Quads2d.py]*A';
-                valuek(indk, 1) = sum(Quads2d.w*(fnk(cordf(:,1), cordf(:,2)).*I))/2*Area;
+                valuek(indk, 1) = sum(Quads2d.w*(fnf(cordf(:,1), cordf(:,2)).*I))/2*Area;
             else
                 valuek(indk, 1) = sum(Quads2d.w*I)/2*Area;
             end

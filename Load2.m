@@ -23,7 +23,7 @@ if sum(hflag)
     if degree == 2; N = (U.N-U.Nt)/2*3; end
 end
 n = size(U.TC(1, :), 2);
-N = U.Nt*n+N*sum(hflag);
+N = ceil(U.Nt*n+N*sum(hflag));
 indi = ones(N, 1);
 indj = ones(N, 1);
 valueF = zeros(N, 1);

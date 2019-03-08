@@ -30,7 +30,7 @@ end
 indk = 1;
 n1 = size(U1.TC(1, :), 2);
 n2 = size(U2.TC(1, :), 2);
-tmp = ceil(U1.Nt*n1*n2);
+tmp = U1.Nt*n1*n2;
 indi = ones(tmp ,1);
 indj = ones(tmp, 1);
 valuek = zeros(tmp, 1);
