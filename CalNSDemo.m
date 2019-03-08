@@ -35,7 +35,7 @@ K = [Mu/dt+nu*Ku, sparse(Nu, Nu), -Kuxp;
     -Kuxp', -Kuyp', 1e-10*Mp];
 Freedom = [FNu1; FNu2; FNp];
 Xold = [U1(U.Node(:,1), U.Node(:,2));
-    U2(U.Node(:,1), U.Node(:,2));
+    U2(U.Node(:,1), U.Node(:, 2));
     zeros(Np,1)];
 
 for t = dt:dt:t1
@@ -65,19 +65,23 @@ for t = dt:dt:t1
     Xold = X;
     
 
-    if ~mod(t, 0.1)        
+    if ~mod(t, 0.1) 
+        %{
         subplot(1,2,1)
         trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), X(1:Nu));
         subplot(1,2,2)
         trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), U1(U.Node(:, 1), U.Node(:, 2)));
-        %{
+        suptitle({['t = ', num2str(t), 's']});
+        %}
         trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), X(2*Nu+1:end),...
             'FaceColor', 'interp', 'EdgeColor', 'interp');
+        % colorbar;
+        quiver(U.Node(:, 1), U.Node(:, 2), X(1:Nu), X(Nu+1:2*Nu));
         view(2);
         box off; set(gca, 'XTick', [], 'YTick', []);
-        colorbar;
-        %}
-        title({['t = ', num2str(t), 's']});
+        
+        title({['t = ', num2str(t), 's'], ['residual = ', num2str(norm(K*X-F, 2))]});
+        
         pause(0.01)
     end
 end
