@@ -31,7 +31,7 @@ K2 = symBilinear(U2, 'mass');
 u = @(x, y) x.^2;
 v = @(x, y) x.*y;
 
-%% Intergration Part
+
 % Get Nodal info
 U = u(U2.Node(:,1), U2.Node(:,2));
 V = v(U2.Node(:,1), U2.Node(:,2));
@@ -39,6 +39,8 @@ V = v(U2.Node(:,1), U2.Node(:,2));
 fprintf("The FEM approximation value is %.6f\n", U'*K2*V);
 fprintf("The true value is %.6f\n", integral2(@(x,y) x.^3.*y,0,1,0,@(x)1-x));
 
+
+%% Intergration Part
 % Define the domain and generate mesh
 clear
 N = 4;
@@ -46,6 +48,15 @@ Nx = N; Ny = N;
 T = RecMesh([Nx, Ny], [1, 1], [0, 0]);
 
 % Define a space for calculation
+P = P1Fespace(T);
+
+G = {@(x, y)0, @(x, y)0, @(x, y)0, @(x, y)0};
+[BX, FreeB] = Freedomdefine(P, [1,1,1,1], G);
+NB = sum(FreeB);
+A = 0.2;
+T.Node(FreeB, :) = T.Node(FreeB, :) + A*rand(NB, 2) - A/2;
+ShowMesh(T);
+
 P = P1Fespace(T);
 U = P2Fespace(T);
 
@@ -115,7 +126,7 @@ fprintf("The true value is %.6f\n", integral2(@(x,y) 2*x.*y,0,1,0,1));
 
 %% 5.Test of numP2Bilinear
 u = @(x, y) x.^2;
-f = @(x, y) x;
+f = @(x, y) x.*y;
 v = @(x, y) y;
 
 fnk = f(U.Node(:,1), U.Node(:,2));
@@ -125,9 +136,9 @@ U1 = u(U.Node(:,1), U.Node(:,2));
 V1 = v(U.Node(:,1), U.Node(:,2));
 fprintf("5\n")
 fprintf("The FEM approximation value is %.6f\n", V1'*Mat1*U1);
-fprintf("The true value is %.6f\n", integral2(@(x,y) 2*x.^2.*y,0,1,0,1));
+fprintf("The true value is %.6f\n", integral2(@(x,y) 2*x.^2.*y.^2,0,1,0,1));
 fprintf("The FEM approximation value is %.6f\n", V1'*Mat2*U1);
-fprintf("The true value is %.6f\n", integral2(@(x,y) x.^2.*y,0,1,0,1));
+fprintf("The true value is %.6f\n", integral2(@(x,y) x.^2.*y.^2,0,1,0,1));
 
 
 %% 6. Test of Bilinear1d
@@ -143,10 +154,12 @@ M1 = Bilinear1d(T, 3, P, "mass", P, "mass");
 M2 = Bilinear1d(T, 3, U, "mass", U, "mass");
 Mdx1 = Bilinear1d(T, 3, P, "dx", P, "mass");
 Mdx2 = Bilinear1d(T, 3, U, "dx", U, "mass");
+M3 = Bilinear1d(T, 3, U, "mass", P, "mass");
 fprintf("6\n");
 fprintf("The FEM approximation value is %.6f\n", V1'*M1*U1);
 fprintf("The FEM approximation value is %.6f\n", U1'*M1*V1);
 fprintf("The FEM approximation value is %.6f\n", U2'*M2*V2);
+fprintf("The FEM approximation value is %.6f\n", U2'*M3*V1);
 fprintf("The true value is %.6f\n", integral(@(x) x.^2, 0,1));
 fprintf("The FEM approximation value is %.6f\n", U1'*Mdx1*V1);
 fprintf("The FEM approximation value is %.6f\n", U2'*Mdx2*V2);
