@@ -4,6 +4,7 @@
 n = 1;
 dt = 0.02; nu = 0.7; t = 0; t1 = 10;
 
+
 f1 = @(x,y) sin(x).*cos(y+t)+(2*nu-1)*sin(x).*sin(y+t);
 f2 = @(x,y) -cos(x).*sin(y+t)+(2*nu+1)*cos(x).*cos(y+t);
 U1 = @(x,y) sin(x).*sin(y+t);
@@ -45,7 +46,7 @@ for t = dt:dt:t1
     %Truth
     U1 = @(x,y) sin(x).*sin(y+t); 
     U2 = @(x,y) cos(x).*cos(y+t);
-    %pe = @(x,y) cos(x).*sin(y+t);
+    pe = @(x,y) cos(x).*sin(y+t);
     
     G1 = {U1, U1, U1, []};
     G2 = {U2, U2, U2, []};
@@ -74,14 +75,18 @@ for t = dt:dt:t1
         suptitle({['t = ', num2str(t), 's']});
         %}
         trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), X(2*Nu+1:end),...
-            'FaceColor', 'interp', 'EdgeColor', 'interp');
-        % colorbar;
-        quiver(U.Node(:, 1), U.Node(:, 2), X(1:Nu), X(Nu+1:2*Nu));
+            'FaceColor', 'interp', 'EdgeColor', 'interp', 'facealpha', 0.5, 'edgealpha', 0);
+        colorbar;
+        hold on
+        quiver(U.Node(:, 1), U.Node(:, 2), X(1:Nu), X(Nu+1:2*Nu), "color", "k");
+        hold off
         view(2);
         box off; set(gca, 'XTick', [], 'YTick', []);
-        
-        title({['t = ', num2str(t), 's'], ['residual = ', num2str(norm(K*X-F, 2))]});
-        
+        err = [Mu, sparse(Nu, Nu);sparse(NFu, Nu), Mu]*[X(1:Nu)-U1(U.Node(:, 1), U.Node(:, 2)); X(Nu+1:2*Nu)-U2(U.Node(:, 1), U.Node(:, 2))];
+        title({['t = ', num2str(t), 's'], ['residual = ', num2str(norm(err, 2))]});
+        axis equal
+        axis([-0.1, 1.1, -0.1, 1.1])
+        set(gca, "xcolor", "white", "ycolor", "white")
         pause(0.01)
     end
 end
