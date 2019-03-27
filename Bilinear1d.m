@@ -12,7 +12,7 @@ indj = ones(n1*n2*N, 1);
 valuek = zeros(n1*n2*N, 1);
 indk = 1;
 for i = 1:N
-    iind = [edgej(i), mod(edgej(i)+1, 3), 3+edgej(i)];
+    iind = [edgej(i), edgej(i)+1-3*(edgej(i)==3), 3+edgej(i)];
     if U1.Degree == 1; ind1 = T.Tri(edgei(i), iind(1:2)); end
     if U1.Degree == 2; ind1 = [T.Tri(edgei(i), iind(1:2)), T.N+T.TrEg(edgei(i), edgej(i))]; end
     if U2.Degree == 1; ind2 = T.Tri(edgei(i), iind(1:2)); end
