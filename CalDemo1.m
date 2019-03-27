@@ -15,6 +15,7 @@ U = P2Fespace(T);
 
 % System Clarification
 K = symBilinear(U, 'nabla', []);
+M = symBilinear(U, 'mass', []);
 % K = nonsymBilinear(U, 'nabla', U, 'nabla', []);
 G = {u, u, u, u};
 [X, FNodeptr] = Freedomdefine(U, [1,1,1,1], G);
