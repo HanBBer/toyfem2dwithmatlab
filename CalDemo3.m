@@ -1,20 +1,24 @@
 % This is a Stokes Problem calculation demo
+%
+% laplace(u) - nabla p = f
+% div(u) = 0
 
 % Boundary condition
 
-
+%{
 u1 = @(x,y) 1-y.^2;
 u2 = @(x,y) 0.*x;
-% p = @(x,y) -2*x;
+p  = @(x,y) -2*x;
 f1 = @(x,y) 0;
 f2 = @(x,y) 0;
-%{
+%}
+
 u1 = @(x,y) sin(x).*sin(y);
 u2 = @(x,y) cos(x).*cos(y);
-% p = @(x,y) cos(x).*sin(y);
-f1 = @(x,y) 0;
-f2 = @(x,y) 2*cos(x).*cos(y);
-%}
+p  = @(x,y) cos(x).*sin(y);
+f1 = @(x,y) -sin(x).*sin(y);
+f2 = @(x,y) -3*cos(x).*cos(y);
+
 
 % Space Define
 N = 4;
@@ -24,6 +28,7 @@ U = P2Fespace(T);
 P = P1Fespace(T);
 
 % System Clarification
+Mu = symBilinear(U, 'mass', []);
 Ku = symBilinear(U, 'nabla', []);
 Kuxp = nonsymBilinear(T, U, 'dx', P, 'mass', []);
 Kuyp = nonsymBilinear(T, U, 'dy', P, 'mass', []);
@@ -39,9 +44,10 @@ F2 = Load(U, f2);
 % Assembling
 Nu = U.N;
 Np = P.N;
-K = [Ku, sparse(Nu, Nu), -Kuxp;
-    sparse(Nu, Nu), Ku, -Kuyp;
-    -Kuxp', -Kuyp', 1e-10*Mp];
+%  1e-10*Mp   sparse(Np, Np)
+K = [-Ku, sparse(Nu, Nu), Kuxp;
+    sparse(Nu, Nu), -Ku, Kuyp;
+    Kuxp', Kuyp', 1e-10*Mp];
 X = [Xu1; Xu2; Xp];
 Freedom = [FNu1; FNu2; FNp];
 F = [F1; F2; sparse(Np,1)];
@@ -51,13 +57,18 @@ KK = K(Freedom, Freedom);
 FF = F(Freedom) - K(Freedom, ~Freedom)*X(~Freedom);
 X(Freedom) = KK\FF;
 erru = X(1:2*Nu) - [u1(U.Node(:,1), U.Node(:,2)); u2(U.Node(:,1), U.Node(:,2))];
-norm(K(1:2*Nu,1:2*Nu)*erru, 1)
+erruH1 = sqrt(norm(erru'*[Mu+Ku, sparse(Nu, Nu);
+    sparse(Nu, Nu), Mu+Ku;]*erru, 2));
+fprintf("N = %d, H1 error of u is %.4e\n", N, erruH1);
+errp = X(2*Nu+1:end) - p(P.Node(:,1), P.Node(:,2));
+%errp = errp - mean(errp);
+errpL2 = sqrt(norm(errp'*Mp*errp, 2));
+fprintf("N = %d, L2 error of u is %.4e\n", N, errpL2);
 subplot(1,2,1);
 %trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), X(1:Nu));
-trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), erru(1:Nu), ...
-                'FaceColor', 'interp', 'EdgeColor', 'interp');
+trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), erru(1:Nu));
 subplot(1,2,2);
 %trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), X(Nu+1:2*Nu));
-trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), erru(1:Nu));
+%trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), erru(1:Nu));
 %figure
-%trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), X(2*Nu+1:end));
+trisurf(P.Tri, P.Node(:, 1), P.Node(:, 2), errp);

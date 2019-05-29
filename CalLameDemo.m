@@ -1,7 +1,8 @@
 % This is a cal demo of lame system
 
 % Space Define
-nx = 30; ny = 5;
+N = 1;
+nx = 30*N; ny = 5*N;
 T = RecMesh([nx, ny], [20, 2], [0, -1]);
 P = P1Fespace(T);
 U = P2Fespace(T);
@@ -31,10 +32,13 @@ BX = X;
 BY = X;
 
 posM = T.Edge(T.EgFlag == 1, :);
-g = @(x) 0.6*sin(pi*x/10);
+posM = unique(posM(:));
+g = @(x) sin(pi*x/10);
 BY(posM) = g(T.Node(posM, 1));
+
 posM = T.Edge(T.EgFlag == 3, :);
-g = @(x) 0.6*sin(pi*x/10);
+posM = unique(posM(:));
+g = @(x) sin(pi*x/10);
 BY(posM) = g(T.Node(posM, 1));
 
 XX = [BX; BY];
@@ -45,15 +49,23 @@ XX(FreeB) = KMoving\FBoundary;
 %T.Node = reshape(XX, NFp, 2);
 triplot(T.Tri, T.Node(:,1), T.Node(:,2));
 axis equal
-box off;set(gca,'xtick',[],'ytick',[],'xcolor','white','ycolor','white');
+pause(0.1)
+clf
+hold on
+for i = 1:T.N
+    if ~FNMoving(i); plot(T.Node(i,1)+XX(i), T.Node(i,2)+XX(i+NSp), 'b+');end
+end
+axis equal
+box on
+hold off
 pause(0.1)
 triplot(T.Tri, T.Node(:,1)+XX(1:NSp), T.Node(:,2)+XX(NSp+1:end));
-box off;set(gca,'xtick',[],'ytick',[],'xcolor','white','ycolor','white');
+%box off;set(gca,'xtick',[],'ytick',[],'xcolor','white','ycolor','white');
 axis equal
 pause(0.1)
 % Test For the elasticity
-dt = 5e-4;
-runtime = 0.1;
+dt = 1e-3;
+runtime = 3e-2;
 
 DXold = InterpolateP1toP2(T, XX(1:NSp));
 DYold = InterpolateP1toP2(T, XX(NSp+1:end));
@@ -77,8 +89,9 @@ Xold = [sparse(2*NSu,1); DXold; DYold];
 BigF = sparse(4*NSu, 1);
 KK = Sys(Free, Free);
 XX = [X;X;X;X];
-
-for t = 0:dt:runtime
+npic = 0;
+%set(figure(1),'visible','off');
+for t = dt:dt:runtime
     FF = BigF + Sysold*Xold;
     FF = FF(Free) - Sys(Free, ~Free)*XX(~Free);
     XX(Free) = KK\FF;
@@ -86,8 +99,9 @@ for t = 0:dt:runtime
     BY = T.Node(:,2) + InterpolateP2toP1(T, XX(3*NSu+1:4*NSu));
     triplot(T.Tri, BX, BY);
     axis equal
-    title(['t = ', num2str(t)]);
-    box off;set(gca,'xtick',[],'ytick',[],'xcolor','white','ycolor','white');
-    pause(0.01)
+    %title(['t = ', num2str(t)]);
     Xold = XX;
+    %saveas(gca, ['lame', num2str(npic) ,'.jpg'])
+    pause(0.01)
+    npic = npic + 1;
 end

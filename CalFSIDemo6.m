@@ -11,7 +11,7 @@ dt = 2e-2;
 runtime = 1;
 rhoF = 1;
 nuF = 0.035;
-rhoS = 2;
+rhoS = 1.1;
 muS = 5.75e6;
 lambda = 1.7e6;
 A = 5;
@@ -248,6 +248,7 @@ for t = 0:dt:runtime
     
     trisurf(TF.Tri, TF0.Node(:,1)+A*(TF.Node(:, 1)-TF0.Node(:,1)), TF0.Node(:,2)+A*(TF.Node(:, 2)-TF0.Node(:,2)), XFSI(2*NFu+1:2*NFu+NFp),...
         'FaceColor', 'interp', 'EdgeColor', 'interp');
+    colorbar;
     hold on
     trisurf(TF.Tri, TF0.Node(:,1)+A*(TF.Node(:, 1)-TF0.Node(:,1)), -TF0.Node(:,2)-A*(TF.Node(:, 2)-TF0.Node(:,2)), XFSI(2*NFu+1:2*NFu+NFp),...
         'FaceColor', 'interp', 'EdgeColor', 'interp');

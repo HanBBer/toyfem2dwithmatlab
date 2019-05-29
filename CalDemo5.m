@@ -2,7 +2,7 @@
 % which refers to Example 3.8 of FreeFem++ lame.edp
 
 % Space Define
-N = 10;
+N = 5;
 nx = N; ny = N;
 T = RecMesh([nx, ny], [20, 2], [0, -1]);
 U = P2Fespace(T);
@@ -31,4 +31,6 @@ FF = BigF(Freedom) - BigK(Freedom, ~Freedom)*BigX(~Freedom);
 BigX(Freedom) = KK\FF;
 
 coef = 100;
-triplot(U.Tri, U.Node(:, 1)+BigX(1:Nu)*coef, U.Node(:, 2)+BigX(Nu+1:end)*coef);
+triplot(U.Tri, U.Node(:, 1)+BigX(1:Nu)*coef, U.Node(:, 2)+BigX(Nu+1:end)*coef, 'k');
+axis equal
+axis off

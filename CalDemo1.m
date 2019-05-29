@@ -1,11 +1,12 @@
 % dbstop if error;
 % This is a Dirichlet Problem calculation demo
 
-ShowFlag = 0;
+ShowFlag = 1;
 
 % Problem Preparation(truth and boundary condition)
 u = @(x, y) exp(sin(x)+cos(y));
 f = @(x, y) -(cos(x).^2-sin(x)+sin(y).^2-cos(y)).*exp(sin(x)+cos(y));
+
 
 % Space Define
 N = 4;
@@ -33,7 +34,7 @@ if ShowFlag == 1
     trisurf(U.Tri, U.Node(:, 1), U.Node(:, 2), err1);
 end
 
-err1L2 = norm(K*err1,1);
+err1L2 = norm(K*err1,2);
 fprintf("h = %.3f, L2 error is %.6f\n", 1/N, err1L2);
 
 
